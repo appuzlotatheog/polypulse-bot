@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polypulse | High-Frequency Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #050507; color: #e2e8f0; }
+        .glass { background: rgba(16, 16, 24, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glow-green { box-shadow: 0 0 15px rgba(74, 222, 128, 0.1); }
+        .glow-blue { box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050507; }
+        ::-webkit-scrollbar-thumb { background: #1e1e2e; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2a2a3a; }
+    </style>
+    <meta http-equiv="refresh" content="10">
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                    POLYPULSE <span class="text-xs font-mono text-gray-500 font-normal">v2.0</span>
+                </h1>
+                <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest">Quantitative Arbitrage Protocol</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="flex flex-col items-end">
+                    <span class="text-xs text-gray-500 uppercase font-semibold">Engine Status</span>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <span class="text-emerald-400 font-mono text-sm uppercase">Active / {{ stats.mode }}</span>
+                    </div>
+                </div>
+                <div class="h-10 w-[1px] bg-gray-800 mx-2"></div>
+                <div class="px-4 py-2 glass rounded-lg border border-gray-800">
+                    <span class="text-xs text-gray-500 block uppercase">Analyzer</span>
+                    <span class="font-bold text-blue-400 uppercase">{{ stats.analyzer }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="glass p-6 rounded-2xl glow-blue">
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-2">Total Alerts</p>
+                <h2 class="text-3xl font-bold font-mono">{{ stats.total_trades }}</h2>
+                <div class="mt-4 flex items-center text-xs text-emerald-400">
+                    <span>↑ 12% from last hour</span>
+                </div>
+            </div>
+            <div class="glass p-6 rounded-2xl glow-green">
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-2">Average Profit</p>
+                <h2 class="text-3xl font-bold font-mono text-emerald-400">{{ stats.avg_profit }}</h2>
+                <div class="mt-4 flex items-center text-xs text-emerald-400">
+                    <span>Alpha detected</span>
+                </div>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-2">Wallet Balance</p>
+                <h2 class="text-3xl font-bold font-mono">$0.00 <span class="text-sm text-gray-600 font-normal">USDC</span></h2>
+                <div class="mt-4 flex items-center text-xs text-gray-500">
+                    <span>Polygon Mainnet</span>
+                </div>
+            </div>
+            <div class="glass p-6 rounded-2xl border-blue-500/20">
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-2">Smart Sizing</p>
+                <h2 class="text-3xl font-bold font-mono">Kelly</h2>
+                <div class="mt-4 flex items-center text-xs text-blue-400">
+                    <span>Risk optimized</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Chart area -->
+            <div class="lg:col-span-2 glass p-6 rounded-2xl h-[400px]">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-gray-400 uppercase text-sm tracking-widest">Performance Matrix</h3>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1 text-xs glass rounded-md text-blue-400 border-blue-500/30">Live</button>
+                        <button class="px-3 py-1 text-xs glass rounded-md text-gray-500">History</button>
+                    </div>
+                </div>
+                <canvas id="performanceChart"></canvas>
+            </div>
+
+            <!-- Strategy Config -->
+            <div class="glass p-6 rounded-2xl h-[400px] overflow-y-auto">
+                <h3 class="font-bold text-gray-400 uppercase text-sm tracking-widest mb-6">Active Strategies</h3>
+                <div class="space-y-4">
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/5 hover:border-blue-500/30 transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-sm text-white group-hover:text-blue-400 transition-colors">Mathematical Arb</h4>
+                                <p class="text-xs text-gray-500 mt-1">Cross-token probability loops</p>
+                            </div>
+                            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded uppercase">Running</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/5 hover:border-emerald-500/30 transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-sm text-white group-hover:text-emerald-400 transition-colors">Flash Crash</h4>
+                                <p class="text-xs text-gray-500 mt-1">Volatility absorption</p>
+                            </div>
+                            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded uppercase">Running</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/5 hover:border-purple-500/30 transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-sm text-white group-hover:text-purple-400 transition-colors">Mean Reversion</h4>
+                                <p class="text-xs text-gray-500 mt-1">Z-Score threshold entry</p>
+                            </div>
+                            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded uppercase">Running</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/5 hover:border-orange-500/30 transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-sm text-white group-hover:text-orange-400 transition-colors">Momentum</h4>
+                                <p class="text-xs text-gray-500 mt-1">Breakout confirmation</p>
+                            </div>
+                            <span class="text-[10px] bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded uppercase">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Table -->
+        <div class="glass rounded-2xl overflow-hidden mb-12">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <h3 class="font-bold text-gray-400 uppercase text-sm tracking-widest">Execution Feed</h3>
+                <span class="text-xs text-gray-500">Live logs from CLOB WebSocket</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-white/5 text-[10px] uppercase tracking-tighter text-gray-500">
+                            <th class="px-6 py-4">Time (UTC)</th>
+                            <th class="px-6 py-4">Market Opportunity</th>
+                            <th class="px-6 py-4">Profit %</th>
+                            <th class="px-6 py-4">Expected ($)</th>
+                            <th class="px-6 py-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5 text-sm font-mono">
+                        {% if trades %}
+                            {% for trade in trades %}
+                            <tr class="hover:bg-white/5 transition-colors group">
+                                <td class="px-6 py-4 text-gray-500 text-xs">{{ trade['Timestamp'].split('T')[1][:8] if 'T' in trade['Timestamp'] else trade['Timestamp'] }}</td>
+                                <td class="px-6 py-4 font-medium text-gray-300">{{ trade['Market'][:80] }}</td>
+                                <td class="px-6 py-4 text-emerald-400 font-bold">{{ trade['Profit %'] }}</td>
+                                <td class="px-6 py-4 text-gray-400">${{ trade['Expected Profit ($)'] }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 py-1 rounded text-[10px] font-bold uppercase {{ 'bg-blue-500/20 text-blue-400' if 'LIVE' in trade['Status'] else 'bg-yellow-500/20 text-yellow-400' }}">
+                                        {{ trade['Status'] }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="px-6 py-20 text-center text-gray-600 italic">No execution data available. Bottleneck scanner active.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['10m ago', '8m ago', '6m ago', '4m ago', '2m ago', 'Now'],
+                datasets: [{
+                    label: 'Profit Spread %',
+                    data: [0.2, 0.5, 0.8, 0.4, 1.2, 0.9],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }, {
+                    label: 'Liquidity Depth ($)',
+                    data: [0.5, 0.4, 0.6, 0.8, 0.7, 1.0],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { 
+                        display: false,
+                        grid: { display: false }
+                    },
+                    x: {
+                        ticks: { color: '#4b5563', font: { size: 10 } },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Fetch real-time data
+        async function updateChart() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                chart.data.labels = data.labels;
+                chart.data.datasets[0].data = data.profit_spread;
+                chart.data.datasets[1].data = data.liquidity;
+                chart.update();
+            } catch (e) {
+                console.error('Failed to update chart:', e);
+            }
+        }
+        setInterval(updateChart, 5000);
+        updateChart();
+    </script>
+</body>
+</html>
