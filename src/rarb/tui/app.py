@@ -1,4 +1,4 @@
-"""The Ultimate Institutional-Grade TUI for Polypulse AI Bot."""
+"""The Ultimate Institutional-Grade TUI for 7Flow AI Bot."""
 
 import asyncio
 import random
@@ -138,8 +138,8 @@ class InstitutionalTable(DataTable):
 class PolypulseInstitutionalTUI(App):
     """The gold standard in trading bot interfaces."""
 
-    TITLE = "POLYPULSE INSTITUTIONAL v2.0"
-    SUB_TITLE = "Advanced Arbitrage & Geopolitical Pulse Engine"
+    TITLE = "7FLOW INSTITUTIONAL v2.0"
+    SUB_TITLE = "7Flow Advanced Arbitrage Engine"
 
     CSS = """
     Screen { background: #020617; }

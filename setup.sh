@@ -1,5 +1,5 @@
 #!/bin/bash
-# Polypulse Bot v2.0 - Premium Setup & Configuration
+# 7Flow Bot v2.0 - Premium Setup & Configuration
 # Interactive setup with enhanced AI provider selection
 
 set -e
@@ -20,7 +20,7 @@ NC='\033[0m'
 show_header() {
     clear
     echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║${NC}  ${BOLD}POLYPULSE BOT v2.0${NC}                              ${CYAN}║${NC}"
+    echo -e "${CYAN}║${NC}  ${BOLD}7FLOW BOT v2.0${NC}                                  ${CYAN}║${NC}"
     echo -e "${CYAN}║${NC}  ${DIM}Professional Polymarket Trading System${NC}            ${CYAN}║${NC}"
     echo -e "${CYAN}╠══════════════════════════════════════════════════════════╣${NC}"
     echo -e "${CYAN}║${NC}  ${PURPLE}AI-Powered${NC} | ${YELLOW}Multi-Strategy${NC} | ${GREEN}Real-Time${NC}        ${CYAN}║${NC}"

@@ -18,7 +18,7 @@ console = Console()
 @click.group()
 @click.version_option(version=__version__)
 def cli() -> None:
-    """rarb - Polymarket arbitrage bot."""
+    """7Flow - Polymarket arbitrage bot."""
     pass
 
 
@@ -84,7 +84,7 @@ def run(
     logging.getLogger("urllib3").setLevel(logging.WARNING)
 
     mode = "DRY RUN" if settings.dry_run else "LIVE TRADING"
-    print(f"\n🤖 Polymarket Trading Bot - {mode}")
+    print(f"\n🤖 7Flow Trading Bot - {mode}")
     print(f"📊 Min profit: {settings.min_profit_threshold * 100:.1f}% | Max position: ${settings.max_position_size}")
     print(f"📁 Logs: rarb.log")
     print("-" * 50 + "\n")

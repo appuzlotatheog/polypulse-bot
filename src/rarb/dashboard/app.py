@@ -10,7 +10,7 @@ from rarb.config import get_settings
 from rarb.utils.logging import get_logger
 
 log = get_logger(__name__)
-app = FastAPI(title="rarb Dashboard")
+app = FastAPI(title="7Flow Dashboard")
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "templates"))
 
 def get_trade_history() -> List[Dict]:

@@ -1,7 +1,7 @@
-# Product Requirements Document: RARB ALPHA v2.0
+# Product Requirements Document: 7Flow ALPHA v2.0
 
 ## Executive Summary
-RARB ALPHA is a high-performance automated trading system designed for decentralized prediction markets. The primary objective is to capture risk-free arbitrage spreads and trade short-term volatility through advanced mathematical models and AI-driven conviction scoring.
+7Flow ALPHA is a high-performance automated trading system designed for decentralized prediction markets. The primary objective is to capture risk-free arbitrage spreads and trade short-term volatility through advanced mathematical models and AI-driven conviction scoring.
 
 ## Target Markets
 - Polymarket (Primary)

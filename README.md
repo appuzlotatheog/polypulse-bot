@@ -1,6 +1,6 @@
-# polypulse-bot v2.0
+# 7Flow Bot v2.0
 
-polypulse-bot is a professional-grade, high-frequency arbitrage trading system for Polymarket. It combines real-time blockchain data, low-latency WebSocket execution, and multi-provider AI analysis to identify and execute profitable opportunities.
+7Flow is a professional-grade, high-frequency arbitrage trading system for Polymarket. It combines real-time blockchain data, low-latency WebSocket execution, and multi-provider AI analysis to identify and execute profitable opportunities.
 
 ## 🚀 Core Features
 
@@ -77,5 +77,5 @@ This software is for educational and research purposes. Prediction market tradin
 
 ## 📄 License
 
-MIT License. Developed by the RARB Team.
+MIT License. Developed by the 7Flow Team (7flow.tech).
 
