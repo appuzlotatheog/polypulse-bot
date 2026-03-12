@@ -433,7 +433,7 @@ def status() -> None:
         tracker = PortfolioTracker()
         trade_log = TradeLog()
 
-        console.print("\n[bold]rarb Bot Status[/bold]\n")
+        console.print("\n[bold]7Flow Bot Status[/bold]\n")
 
         # Current balances
         console.print("[bold cyan]Balances[/bold cyan]")
@@ -1011,7 +1011,7 @@ def dashboard(host: str, port: Optional[int]) -> None:
 
     actual_port = port or settings.dashboard_port
 
-    console.print(f"\n[bold]Starting rarb Dashboard[/bold]")
+    console.print(f"\n[bold]Starting 7Flow Dashboard[/bold]")
     console.print(f"[dim]URL:[/dim] http://{host}:{actual_port}")
     console.print("(Press Ctrl+C to stop)")
     console.print()

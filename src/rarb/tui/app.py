@@ -135,7 +135,7 @@ class InstitutionalTable(DataTable):
     }
     """
 
-class PolypulseInstitutionalTUI(App):
+class SevenFlowInstitutionalTUI(App):
     """The gold standard in trading bot interfaces."""
 
     TITLE = "7FLOW INSTITUTIONAL v2.0"
@@ -397,7 +397,7 @@ class PolypulseInstitutionalTUI(App):
 
 
 def run_tui():
-    PolypulseInstitutionalTUI().run()
+    SevenFlowInstitutionalTUI().run()
 
 
 if __name__ == "__main__":
